@@ -3,6 +3,7 @@ use std::io::Write;
 mod distros;
 mod kernel;
 mod logos;
+mod os;
 
 // original bash neofetch source: https://github.com/dylanaraps/neofetch/blob/master/neofetch
 fn main() {

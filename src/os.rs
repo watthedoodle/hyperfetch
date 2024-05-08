@@ -1,5 +1,6 @@
 use crate::kernel;
 
+#[derive(Debug)]
 pub enum OS {
     Darwin,
     Solaris,

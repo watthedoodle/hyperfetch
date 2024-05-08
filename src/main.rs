@@ -1,5 +1,6 @@
 use std::io;
 use std::io::Write;
+mod distros;
 mod kernel;
 mod logos;
 

@@ -1,10 +1,10 @@
 pub struct Logo {
-  pub ascii: String,
-  pub width: u16,
-  pub height: u16
+    pub ascii: String,
+    pub width: u16,
+    pub height: u16,
 }
 
-pub fn free_bsd() -> String {
+pub fn free_bsd() -> Logo {
     let x = r"
     ${c2}```                        ${c1}`
     ${c2}` `.....---...${c1}....--.```   -/
@@ -22,10 +22,16 @@ pub fn free_bsd() -> String {
          .--             `--.
             .---.....----.
     ";
-    self::colorise(x)
+    let d = self::dimensions(x);
+    let ascii = self::colorise(x);
+    Logo {
+        ascii: ascii,
+        width: d.0,
+        height: d.1,
+    }
 }
 
-pub fn ubuntu() -> String {
+pub fn ubuntu() -> Logo {
     let x = r"
 ${c1}                         ./+o+-
 ${c2}                 yyyyy- ${c1}-yyyyyy+
@@ -46,7 +52,13 @@ ${c1}              /osyyyyyyo${c3}++ooo+++/
 ${c1}                  ````` ${c3}+oo+++o:
 ${c3}                         `oo++.
 ";
-    self::colorise(x)
+    let d = self::dimensions(x);
+    let ascii = self::colorise(x);
+    Logo {
+        ascii: ascii,
+        width: d.0,
+        height: d.1,
+    }
 }
 
 pub fn arch() -> Logo {
@@ -70,17 +82,17 @@ pub fn arch() -> Logo {
       `+sso+:-`                 `.-/+oso:
      `++:.                           `-/+/
      .`                                 `/";
-    
+
     let d = self::dimensions(x);
     let ascii = self::colorise(x);
     Logo {
-      ascii: ascii,
-      width: d.0,
-      height: d.1
+        ascii: ascii,
+        width: d.0,
+        height: d.1,
     }
 }
 
-pub fn garuda() -> String {
+pub fn garuda() -> Logo {
     let x = r#"
 ${c3}
                      .%;888:8898898:
@@ -101,7 +113,13 @@ ${c3}
           d:SS@8ba89aa67a853Sxxad.
             .d988999889889899dd.
 "#;
-    self::colorise(x)
+    let d = self::dimensions(x);
+    let ascii = self::colorise(x);
+    Logo {
+        ascii: ascii,
+        width: d.0,
+        height: d.1,
+    }
 }
 
 fn colorise(x: &str) -> String {
@@ -114,16 +132,16 @@ fn colorise(x: &str) -> String {
 }
 
 fn dimensions(s: &str) -> (u16, u16) {
-  let tokens = s.to_string();
-  let mut tokens: Vec<_> = tokens.split('\n').map(|x| x.len()).collect();
-  tokens.sort();
-  tokens.reverse();
-  if tokens.len() > 0 {
-    if let Ok(f) = tokens[0].try_into() {
-      if let Ok(y) = tokens.len().try_into() {
-        return (f, y);
-      }
+    let tokens = s.to_string();
+    let mut tokens: Vec<_> = tokens.split('\n').map(|x| x.len()).collect();
+    tokens.sort();
+    tokens.reverse();
+    if tokens.len() > 0 {
+        if let Ok(f) = tokens[0].try_into() {
+            if let Ok(y) = tokens.len().try_into() {
+                return (f, y);
+            }
+        }
     }
-  }
-  (0, 0)
+    (0, 0)
 }

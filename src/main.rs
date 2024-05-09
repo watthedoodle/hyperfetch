@@ -29,7 +29,7 @@ fn main() {
     // if os.version.to_lowercase().contains("garuda") {
     //     logo = logos::garuda();
     // }
-    let _ = io::stdout().write_all(&format!("{}", logos::arch()).as_bytes());
+    let _ = io::stdout().write_all(&format!("{}", logos::arch().ascii).as_bytes());
 
     println!("");
 }

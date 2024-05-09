@@ -1,3 +1,9 @@
+pub struct Logo {
+  pub ascii: String,
+  pub width: u16,
+  pub height: u16
+}
+
 pub fn free_bsd() -> String {
     let x = r"
     ${c2}```                        ${c1}`
@@ -43,7 +49,7 @@ ${c3}                         `oo++.
     self::colorise(x)
 }
 
-pub fn arch() -> String {
+pub fn arch() -> Logo {
     let x = r"
     ${c1}                   -`
                       .o+`
@@ -64,7 +70,14 @@ pub fn arch() -> String {
       `+sso+:-`                 `.-/+oso:
      `++:.                           `-/+/
      .`                                 `/";
-    self::colorise(x)
+    
+    let d = self::dimensions(x);
+    let ascii = self::colorise(x);
+    Logo {
+      ascii: ascii,
+      width: d.0,
+      height: d.1
+    }
 }
 
 pub fn garuda() -> String {
@@ -98,4 +111,19 @@ fn colorise(x: &str) -> String {
         .replace("${c4}", "\x1B[0m\x1B[34m")
         .replace("${c5}", "\x1B[0m\x1B[35m")
         .replace("${c6}", "\x1B[0m\x1B[36m")
+}
+
+fn dimensions(s: &str) -> (u16, u16) {
+  let tokens = s.to_string();
+  let mut tokens: Vec<_> = tokens.split('\n').map(|x| x.len()).collect();
+  tokens.sort();
+  tokens.reverse();
+  if tokens.len() > 0 {
+    if let Ok(f) = tokens[0].try_into() {
+      if let Ok(y) = tokens.len().try_into() {
+        return (f, y);
+      }
+    }
+  }
+  (0, 0)
 }

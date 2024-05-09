@@ -38,23 +38,23 @@ fn main() {
     self::newline_with_width(w);
     self::render(self::info("Resolution", "???"));
     self::newline_with_width(w);
-    self::render(format!("DE: <TODO>"));
+    self::render(self::info("DE", "???"));
     self::newline_with_width(w);
-    self::render(format!("WM: <TODO>"));
+    self::render(self::info("WM", "???"));
     self::newline_with_width(w);
-    self::render(format!("WM Theme: <TODO>"));
+    self::render(self::info("WM Theme", "???"));
     self::newline_with_width(w);
-    self::render(format!("Theme: <TODO>"));
+    self::render(self::info("Theme", "???"));
     self::newline_with_width(w);
-    self::render(format!("Icons: <TODO>"));
+    self::render(self::info("Icons", "???"));
     self::newline_with_width(w);
-    self::render(format!("Terminal: <TODO>"));
+    self::render(self::info("Terminal", "???"));
     self::newline_with_width(w);
-    self::render(format!("CPU: <TODO>"));
+    self::render(self::info("CPU", "???"));
     self::newline_with_width(w);
-    self::render(format!("GPU: <TODO>"));
+    self::render(self::info("GPU", "???"));
     self::newline_with_width(w);
-    self::render(format!("Memory: <TODO>"));
+    self::render(self::info("Memory", "???"));
     
     if h > 18 {
         let excess = h - 18;

@@ -4,6 +4,7 @@ mod distros;
 mod kernel;
 mod logos;
 mod os;
+mod shell;
 
 // original bash neofetch source: https://github.com/dylanaraps/neofetch/blob/master/neofetch
 // ansci cursor codes https://notes.burke.libbey.me/ansi-escape-codes/
@@ -26,7 +27,7 @@ fn main() {
     self::render(self::bold_on());
     self::render(self::info("OS", "???"));
     self::newline_with_width(w);
-    self::render(self::info("HOST", "???"));
+    self::render(self::info("Host", "???"));
     self::newline_with_width(w);
     self::render(self::info("Kernel", &kernel.release));
     self::newline_with_width(w);
@@ -55,7 +56,7 @@ fn main() {
     self::render(self::info("GPU", "???"));
     self::newline_with_width(w);
     self::render(self::info("Memory", "???"));
-    
+
     if h > 18 {
         let excess = h - 18;
         for num in 0..excess {
@@ -116,5 +117,13 @@ fn reset() -> String {
 }
 
 fn info(k: &str, v: &str) -> String {
-    format!("{}{}{}{}:{} {}", self::reset(), self::bold_on(), self::red(), k, self::reset(), v)
+    format!(
+        "{}{}{}{}:{} {}",
+        self::reset(),
+        self::bold_on(),
+        self::red(),
+        k,
+        self::reset(),
+        v
+    )
 }

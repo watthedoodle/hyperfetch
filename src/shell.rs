@@ -12,3 +12,7 @@ pub fn exec(cmd: &str) -> String {
         false => return String::from_utf8_lossy(&_sh.stderr).to_string(),
     }
 }
+
+pub fn clean(x: String) -> String {
+    x.replace("\n", "")
+}

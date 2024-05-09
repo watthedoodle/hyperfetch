@@ -5,6 +5,7 @@ mod kernel;
 mod logos;
 mod os;
 mod shell;
+mod title;
 
 // original bash neofetch source: https://github.com/dylanaraps/neofetch/blob/master/neofetch
 // ansci cursor codes https://notes.burke.libbey.me/ansi-escape-codes/
@@ -19,7 +20,7 @@ fn main() {
     self::render(self::move_cursor_up(h));
     self::newline_with_width(w);
     self::render(self::bold_on());
-    self::render(format!("watthedoodle@workstation"));
+    self::render(title::get());
     self::newline_with_width(w);
     self::render(self::reset());
     self::render(format!("-----------------"));

@@ -1,4 +1,5 @@
 use crate::kernel;
+use std::fmt;
 
 #[derive(Debug)]
 pub enum OS {
@@ -13,6 +14,24 @@ pub enum OS {
     Bsd,
     Windows,
     Unknown,
+}
+
+impl fmt::Display for OS {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            OS::Darwin => write!(f, "Mac OS X"),
+            OS::Solaris => write!(f, "Solaris"),
+            OS::Haiku => write!(f, "Haiku"),
+            OS::Minix => write!(f, "MINIX"),
+            OS::Aix => write!(f, "AIX"),
+            OS::Irix => write!(f, "IRIX"),
+            OS::FreeMint => write!(f, "FreeMiNT"),
+            OS::Linux => write!(f, "Linux"),
+            OS::Bsd => write!(f, "BSD"),
+            OS::Windows => write!(f, "Windows"),
+            OS::Unknown => write!(f, "Unknown"),
+        }
+    }
 }
 
 pub fn detect() -> OS {

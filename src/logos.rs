@@ -4,6 +4,27 @@ pub struct Logo {
     pub height: u16,
 }
 
+pub fn detect(distro: &str) -> Logo {
+    if distro.contains("Ubuntu") {
+        return self::ubuntu();
+    }
+    if distro.contains("Garuda") {
+        return self::garuda();
+    }
+    if distro.contains("Arch") {
+        return self::arch();
+    }
+    if distro.contains("FreeBSD") {
+        return self::free_bsd();
+    }
+    // use an unknown ascii art here
+    Logo {
+        ascii: "UNKNOWN".to_string(),
+        width: 7,
+        height: 1,
+    }
+}
+
 pub fn free_bsd() -> Logo {
     let x = r"
     ${c2}```                        ${c1}`

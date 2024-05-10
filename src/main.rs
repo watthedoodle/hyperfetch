@@ -12,9 +12,11 @@ mod title;
 fn main() {
     let machine = os::detect();
     let kernel = kernel::uname();
-    let w = logos::arch().width;
-    let h = logos::arch().height;
-    let ascii = logos::arch().ascii;
+    let distro = distros::get(os::detect());
+    let logo = logos::detect(&distro);
+    let w = logo.width;
+    let h = logo.height;
+    let ascii = logo.ascii;
 
     self::render(ascii);
     self::render(self::move_cursor_up(h));
@@ -26,7 +28,7 @@ fn main() {
     self::render(format!("-----------------"));
     self::newline_with_width(w);
     self::render(self::bold_on());
-    self::render(self::info("OS", "???"));
+    self::render(self::info("OS", &format!("{} {}", distro, kernel.machine)));
     self::newline_with_width(w);
     self::render(self::info("Host", "???"));
     self::newline_with_width(w);

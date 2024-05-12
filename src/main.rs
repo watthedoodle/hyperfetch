@@ -1,5 +1,7 @@
 use std::io;
 use std::io::Write;
+use clap::Parser;
+
 mod distros;
 mod kernel;
 mod logos;
@@ -7,13 +9,29 @@ mod os;
 mod shell;
 mod title;
 
+#[derive(Parser,Default,Debug)]
+#[clap(author="Wat The Dooodle",version, about="A re-imagined neofetch in Rust")]
+struct Arguments {
+    /// Which distro's ascii art to display
+    #[clap(long)]
+    ascii_distro: Option<String>
+}
+
+
 // original bash neofetch source: https://github.com/dylanaraps/neofetch/blob/master/neofetch
 // ansci cursor codes https://notes.burke.libbey.me/ansi-escape-codes/
 fn main() {
+    let args = Arguments::parse();
+
     let machine = os::detect();
     let kernel = kernel::uname();
     let distro = distros::get(os::detect());
-    let logo = logos::detect(&distro);
+    
+    let logo = match args.ascii_distro {
+        Some(x) => logos::detect(&x),
+        None => logos::detect(&distro)
+    };
+    
     let w = logo.width;
     let h = logo.height;
     let ascii = logo.ascii;

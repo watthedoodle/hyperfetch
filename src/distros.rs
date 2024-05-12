@@ -237,13 +237,7 @@ get_distro() {
                         *)    lsb_flags=-sd ;;
                     esac
                     distro=$(lsb_release "$lsb_flags")
-        
-                elif [[ -f /etc/GoboLinuxVersion ]]; then
-                    case $distro_shorthand in
-                        on|tiny) distro=GoboLinux ;;
-                        *) distro="GoboLinux $(< /etc/GoboLinuxVersion)"
-                    esac
-    
+            
                 elif [[ -f /etc/SDE-VERSION ]]; then
                     distro="$(< /etc/SDE-VERSION)"
                     case $distro_shorthand in
@@ -326,20 +320,7 @@ get_distro() {
                 fi
     
                 # distro=$(trim_quotes "$distro")
-                distro=${distro/NAME=}
-    
-                # Get Ubuntu flavor.
-                if [[ $distro == "Ubuntu"* ]]; then
-                    case $XDG_CONFIG_DIRS in
-                        *"studio"*)   distro=${distro/Ubuntu/Ubuntu Studio} ;;
-                        *"plasma"*)   distro=${distro/Ubuntu/Kubuntu} ;;
-                        *"mate"*)     distro=${distro/Ubuntu/Ubuntu MATE} ;;
-                        *"xubuntu"*)  distro=${distro/Ubuntu/Xubuntu} ;;
-                        *"Lubuntu"*)  distro=${distro/Ubuntu/Lubuntu} ;;
-                        *"budgie"*)   distro=${distro/Ubuntu/Ubuntu Budgie} ;;
-                        *"cinnamon"*) distro=${distro/Ubuntu/Ubuntu Cinnamon} ;;
-                    esac
-                fi"#;
+                distro=${distro/NAME=}"#;
 
     let distro = match os {
         OS::Linux | OS::Minix | OS::Bsd => {
@@ -361,6 +342,9 @@ get_distro() {
             if Path::new("/etc/mcst_version").exists() {
                 distro = format!("OS Elbrus");
             }
+            if Path::new("/etc/GoboLinuxVersion").exists() {
+                distro = format!("GoboLinux"); // TODO: include Gobo version
+            }
             let mut sourced = String::new();
             if Path::new("/etc/os-release").exists() {
                 sourced.push_str(&shell::slurp("/etc/os-release"));
@@ -377,6 +361,31 @@ get_distro() {
             if sourced != "" {
                 sourced.push_str("echo ${NAME:-${DISTRIB_ID}} ${VERSION_ID:-${DISTRIB_RELEASE}}");
                 distro = shell::clean(shell::exec(&sourced));
+            }
+            if distro.contains("Ubuntu") {
+                // handle Ubuntu "flavours"
+                let xdg = shell::clean(shell::exec("echo $XDG_CONFIG_DIRS"));
+                if xdg.contains("studio") {
+                    distro = format!("Ubuntu Studio");
+                }
+                if xdg.contains("plasma") {
+                    distro = format!("Kubuntu");
+                }
+                if xdg.contains("mate") {
+                    distro = format!("Ubuntu MATE");
+                }
+                if xdg.contains("xubuntu") {
+                    distro = format!("Xubuntu");
+                }
+                if xdg.contains("Lubuntu") {
+                    distro = format!("Lubuntu");
+                }
+                if xdg.contains("budgie") {
+                    distro = format!("Ubuntu Budgie");
+                }
+                if xdg.contains("cinnamon") {
+                    distro = format!("Ubuntu Cinnamon");
+                }
             }
             distro
         }

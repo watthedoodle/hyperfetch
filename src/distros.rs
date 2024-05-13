@@ -217,7 +217,7 @@ pub fn get(os: OS) -> String {
     // TODO: we're migrating/tramslating the original bash function
     // it's just easier to have it right here to reference. We can
     // delete once we're finished with it.
-    let migrate_script = r#"
+    let _migrate_script = r#"
 get_distro() {
         case $os in
             Linux|BSD|MINIX)                

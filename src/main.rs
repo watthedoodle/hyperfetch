@@ -9,6 +9,7 @@ mod os;
 mod shell;
 mod title;
 mod uptime;
+mod ansi;
 
 #[derive(Parser, Default, Debug)]
 #[clap(
@@ -40,115 +41,56 @@ fn main() {
     let h = logo.height;
     let ascii = logo.ascii;
 
-    self::render(ascii);
-    self::render(self::move_cursor_up(h));
-    self::newline_with_width(w);
-    self::render(self::bold_on());
-    self::render(title::get());
-    self::newline_with_width(w);
-    self::render(self::reset());
-    self::render(format!("-----------------"));
-    self::newline_with_width(w);
-    self::render(self::bold_on());
-    self::render(self::info("OS", &format!("{} {}", distro, kernel.machine)));
-    self::newline_with_width(w);
-    self::render(self::info("Host", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Kernel", &kernel.release));
-    self::newline_with_width(w);
-    self::render(self::info("Uptime", &uptime::get(machine)));
-    self::newline_with_width(w);
-    self::render(self::info("Packages", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Shell", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Resolution", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("DE", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("WM", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("WM Theme", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Theme", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Icons", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Terminal", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("CPU", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("GPU", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Memory", "???"));
+    ansi::render(ascii);
+    ansi::render(ansi::move_cursor_up(h));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::bold_on());
+    ansi::render(title::get());
+    ansi::newline_with_width(w);
+    ansi::render(ansi::reset());
+    ansi::render(format!("-----------------"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::bold_on());
+    ansi::render(ansi::info("OS", &format!("{} {}", distro, kernel.machine)));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Host", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Kernel", &kernel.release));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Uptime", &uptime::get(machine)));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Packages", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Shell", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Resolution", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("DE", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("WM", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("WM Theme", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Theme", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Icons", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Terminal", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("CPU", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("GPU", "???"));
+    ansi::newline_with_width(w);
+    ansi::render(ansi::info("Memory", "???"));
 
     if h > 18 {
         let excess = h - 18;
         for _num in 0..excess {
             println!("");
         }
-        self::print_end();
+        ansi::print_end();
     } else {
         println!("");
-        self::print_end();
+        ansi::print_end();
     }
-}
-
-fn red() -> String {
-    format!("\x1B[31m")
-}
-
-fn render(x: String) {
-    let _ = io::stdout().write_all(&format!("{}", x).as_bytes());
-}
-
-fn print_end() {
-    println!("");
-    println!("");
-}
-
-fn newline_with_width(x: u16) {
-    self::render(self::move_cursor_down(1));
-    self::render(self::move_cursor_back(9999));
-    self::render(self::move_cursor_forward(x));
-}
-
-fn move_cursor_up(x: u16) -> String {
-    format!("\x1B[{}A", x)
-}
-
-fn move_cursor_down(x: u16) -> String {
-    format!("\x1B[{}B", x)
-}
-
-fn move_cursor_forward(x: u16) -> String {
-    format!("\x1B[{}C", x)
-}
-
-fn move_cursor_back(x: u16) -> String {
-    format!("\x1B[{}D", x)
-}
-
-fn move_cursor_to(x: u16, y: u16) -> String {
-    format!("\x1B[{};{}H", x, y)
-}
-
-fn bold_on() -> String {
-    format!("\x1B[1m")
-}
-
-fn reset() -> String {
-    format!("\x1B[0m")
-}
-
-fn info(k: &str, v: &str) -> String {
-    format!(
-        "{}{}{}{}:{} {}",
-        self::reset(),
-        self::bold_on(),
-        self::red(),
-        k,
-        self::reset(),
-        v
-    )
 }

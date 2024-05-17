@@ -1,7 +1,6 @@
 use std::io;
 use std::io::Write;
 
-
 pub fn red() -> String {
     format!("\x1B[31m")
 }

@@ -2,6 +2,7 @@ use clap::Parser;
 use std::io;
 use std::io::Write;
 
+mod ansi;
 mod distros;
 mod kernel;
 mod logos;
@@ -9,7 +10,6 @@ mod os;
 mod shell;
 mod title;
 mod uptime;
-mod ansi;
 
 #[derive(Parser, Default, Debug)]
 #[clap(

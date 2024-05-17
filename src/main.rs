@@ -1,4 +1,4 @@
-use clap::{ Parser};
+use clap::Parser;
 use std::io;
 use std::io::Write;
 

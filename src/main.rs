@@ -18,7 +18,7 @@ mod uptime;
 )]
 struct Arguments {
     /// Which distro's ascii art to display
-    #[clap(long)]
+    #[clap(long("ascii_distro"))]
     ascii_distro: Option<String>,
 }
 

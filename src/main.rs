@@ -1,6 +1,5 @@
-use clap::{ Parser};
-use std::io;
-use std::io::Write;
+use clap::Parser;
+
 
 mod distros;
 mod kernel;
@@ -9,6 +8,7 @@ mod os;
 mod shell;
 mod title;
 mod uptime;
+mod stdout_utils;
 
 #[derive(Parser, Default, Debug)]
 #[clap(
@@ -40,115 +40,56 @@ fn main() {
     let h = logo.height;
     let ascii = logo.ascii;
 
-    self::render(ascii);
-    self::render(self::move_cursor_up(h));
-    self::newline_with_width(w);
-    self::render(self::bold_on());
-    self::render(title::get());
-    self::newline_with_width(w);
-    self::render(self::reset());
-    self::render(format!("-----------------"));
-    self::newline_with_width(w);
-    self::render(self::bold_on());
-    self::render(self::info("OS", &format!("{} {}", distro, kernel.machine)));
-    self::newline_with_width(w);
-    self::render(self::info("Host", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Kernel", &kernel.release));
-    self::newline_with_width(w);
-    self::render(self::info("Uptime", &uptime::get(machine)));
-    self::newline_with_width(w);
-    self::render(self::info("Packages", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Shell", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Resolution", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("DE", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("WM", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("WM Theme", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Theme", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Icons", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Terminal", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("CPU", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("GPU", "???"));
-    self::newline_with_width(w);
-    self::render(self::info("Memory", "???"));
+    stdout_utils::render(ascii);
+    stdout_utils::render(stdout_utils::move_cursor_up(h));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::bold_on());
+    stdout_utils::render(title::get());
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::reset());
+    stdout_utils::render(format!("-----------------"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::bold_on());
+    stdout_utils::render(stdout_utils::info("OS", &format!("{} {}", distro, kernel.machine)));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Host", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Kernel", &kernel.release));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Uptime", &uptime::get(machine)));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Packages", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Shell", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Resolution", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("DE", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("WM", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("WM Theme", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Theme", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Icons", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Terminal", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("CPU", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("GPU", "???"));
+    stdout_utils::newline_with_width(w);
+    stdout_utils::render(stdout_utils::info("Memory", "???"));
 
     if h > 18 {
         let excess = h - 18;
         for _num in 0..excess {
             println!("");
         }
-        self::print_end();
+        stdout_utils::print_end();
     } else {
         println!("");
-        self::print_end();
+        stdout_utils::print_end();
     }
-}
-
-fn red() -> String {
-    format!("\x1B[31m")
-}
-
-fn render(x: String) {
-    let _ = io::stdout().write_all(&format!("{}", x).as_bytes());
-}
-
-fn print_end() {
-    println!("");
-    println!("");
-}
-
-fn newline_with_width(x: u16) {
-    self::render(self::move_cursor_down(1));
-    self::render(self::move_cursor_back(9999));
-    self::render(self::move_cursor_forward(x));
-}
-
-fn move_cursor_up(x: u16) -> String {
-    format!("\x1B[{}A", x)
-}
-
-fn move_cursor_down(x: u16) -> String {
-    format!("\x1B[{}B", x)
-}
-
-fn move_cursor_forward(x: u16) -> String {
-    format!("\x1B[{}C", x)
-}
-
-fn move_cursor_back(x: u16) -> String {
-    format!("\x1B[{}D", x)
-}
-
-fn move_cursor_to(x: u16, y: u16) -> String {
-    format!("\x1B[{};{}H", x, y)
-}
-
-fn bold_on() -> String {
-    format!("\x1B[1m")
-}
-
-fn reset() -> String {
-    format!("\x1B[0m")
-}
-
-fn info(k: &str, v: &str) -> String {
-    format!(
-        "{}{}{}{}:{} {}",
-        self::reset(),
-        self::bold_on(),
-        self::red(),
-        k,
-        self::reset(),
-        v
-    )
 }

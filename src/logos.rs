@@ -4,40 +4,27 @@ pub struct Logo {
     pub height: u16,
 }
 
+const DISTROS: &'static [(&'static str, fn() -> Logo)] = &[
+    ("Ubuntu", self::ubuntu),
+    ("Garuda", self::garuda),
+    ("Arch", self::arch),
+    ("FreeBSD", self::free_bsd),
+    ("Ubuntu Studio", self::ubuntu_studio),
+    ("Kubuntu", self::kubuntu),
+    ("Ubuntu MATE", self::ubuntu_mate),
+    ("Xubuntu", self::xubuntu),
+    ("Lubuntu", self::lubuntu),
+    ("Ubuntu Budgie", self::ubuntu_budgie),
+    ("Ubuntu Cinnamon", self::ubuntu_cinnamon),
+];
+
 pub fn detect(distro: &str) -> Logo {
-    if distro.contains("Ubuntu") {
-        return self::ubuntu();
+    for (k, v) in DISTROS {
+        if distro.contains(k) {
+            return v();
+        }
     }
-    if distro.contains("Garuda") {
-        return self::garuda();
-    }
-    if distro.contains("Arch") {
-        return self::arch();
-    }
-    if distro.contains("FreeBSD") {
-        return self::free_bsd();
-    }
-    if distro.contains("Ubuntu Studio") {
-        return self::ubuntu_studio();
-    }
-    if distro.contains("Kubuntu") {
-        return self::kubuntu();
-    }
-    if distro.contains("Ubuntu MATE") {
-        return self::ubuntu_mate();
-    }
-    if distro.contains("Xubuntu") {
-        return self::xubuntu();
-    }
-    if distro.contains("Lubuntu") {
-        return self::lubuntu();
-    }
-    if distro.contains("Ubuntu Budgie") {
-        return self::ubuntu_budgie();
-    }
-    if distro.contains("Ubuntu Cinnamon") {
-        return self::ubuntu_cinnamon();
-    }
+
     // use an unknown ascii art here
     Logo {
         ascii: "UNKNOWN".to_string(),
